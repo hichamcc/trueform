@@ -1,0 +1,75 @@
+<?php
+
+namespace App\Http\Controllers\Dashboard;
+
+use App\Http\Controllers\Controller;
+use App\Models\Setting;
+use Illuminate\Http\Request;
+
+class CommunityController extends Controller
+{
+    /**
+     * Display community resources, support tools, and external integrations
+     *
+     * Features:
+     * - Glow Scan (AI skin analysis) - Configurable via admin settings
+     * - Case Study submission (Google Form) - Configurable via admin settings
+     * - Community platform access (Discord/Forum) - Configurable via admin settings
+     * - Referral program - Configurable via admin settings
+     * - FAQ section
+     * - Support contact information - Configurable via admin settings
+     */
+    public function index(Request $request)
+    {
+        $user = $request->user();
+        $enrollment = $user->programEnrollment;
+
+        // Get current stage information (1=Foundation, 2=Expansion, 3=Mastery)
+        $currentStage = $enrollment ? $enrollment->getCurrentStage() : 1;
+        $stageName = $enrollment ? $enrollment->getStageName() : 'Foundation';
+        $stageTheme = $enrollment ? $enrollment->getStageTheme() : [];
+
+        // External resources and integrations (pulled from database settings)
+        $resources = [
+            [
+                'title' => 'Run Glow Scan',
+                'description' => 'Use our AI-powered skin analysis to track your skin glow progress',
+                'icon' => 'sparkles',
+                'url' => Setting::get('glow_scan_url', '#'),
+                'type' => 'primary'
+            ],
+            [
+                'title' => 'Submit Case Study',
+                'description' => 'Share your 360-day transformation journey and inspire others',
+                'icon' => 'document-text',
+                'url' => Setting::get('case_study_url', '#'),
+                'type' => 'secondary'
+            ],
+            [
+                'title' => 'Join Community',
+                'description' => 'Connect with others on their wellness journey',
+                'icon' => 'users',
+                'url' => Setting::get('community_url', '#'),
+                'type' => 'secondary'
+            ],
+            [
+                'title' => 'Referral Program',
+                'description' => 'Invite friends to join the 360-day program and earn rewards',
+                'icon' => 'gift',
+                'url' => Setting::get('referral_url', '#'),
+                'type' => 'accent'
+            ],
+        ];
+
+        $supportEmail = Setting::get('support_email', 'support@trueform.com');
+
+        return view('dashboard.community', compact(
+            'resources',
+            'enrollment',
+            'currentStage',
+            'stageName',
+            'stageTheme',
+            'supportEmail'
+        ));
+    }
+}
