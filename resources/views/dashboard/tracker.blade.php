@@ -361,7 +361,7 @@
                 </div>
 
                 <div class="flex items-center space-x-4">
-                    <button type="submit" class="px-8 py-4 bg-gradient-to-r from-silver-600 to-silver-500 hover:from-silver-500 hover:to-silver-400 text-white font-semibold rounded-lg transition-all shadow-lg">
+                    <button type="submit" class="px-8 py-4 bg-gradient-to-r from-green-500 to-green-400 hover:from-green-400 hover:to-green-300 text-white font-semibold rounded-lg transition-all shadow-lg">
                         {{ $todayLog ? 'Update Log' : 'Save Today\'s Log' }}
                     </button>
                     <a href="{{ route('dashboard') }}" class="px-6 py-4 text-gray-400 hover:text-silver-300 transition">
