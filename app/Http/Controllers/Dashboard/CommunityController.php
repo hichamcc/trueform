@@ -32,18 +32,11 @@ class CommunityController extends Controller
         // External resources and integrations (pulled from database settings)
         $resources = [
             [
-                'title' => 'Run Glow Scan',
-                'description' => 'Use our AI-powered skin analysis to track your skin glow progress',
-                'icon' => 'sparkles',
-                'url' => Setting::get('glow_scan_url', '#'),
-                'type' => 'primary'
-            ],
-            [
                 'title' => 'Submit Case Study',
                 'description' => 'Share your 360-day transformation journey and inspire others',
                 'icon' => 'document-text',
                 'url' => Setting::get('case_study_url', '#'),
-                'type' => 'secondary'
+                'type' => 'primary'
             ],
             [
                 'title' => 'Join Community',
@@ -51,13 +44,6 @@ class CommunityController extends Controller
                 'icon' => 'users',
                 'url' => Setting::get('community_url', '#'),
                 'type' => 'secondary'
-            ],
-            [
-                'title' => 'Referral Program',
-                'description' => 'Invite friends to join the 360-day program and earn rewards',
-                'icon' => 'gift',
-                'url' => Setting::get('referral_url', '#'),
-                'type' => 'accent'
             ],
         ];
 

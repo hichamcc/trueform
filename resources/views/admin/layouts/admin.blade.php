@@ -22,11 +22,11 @@
         <!-- Sidebar -->
         <aside id="admin-sidebar" class="fixed lg:static w-64 bg-gradient-to-b from-[#1a1a2e] to-[#16213e] border-r border-silver-900/30 flex flex-col h-full z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
             <!-- Logo / Brand -->
-            <div class="p-6 border-b border-silver-900/30">
-                <div class="flex items-center gap-3 mb-2">
-                    <x-logo-icon size="32" />
+            <div class="p-3 lg:p-6 border-b border-silver-900/30">
+                <div class="flex items-center gap-2 lg:gap-3 mb-2">
+                    <x-logo-icon size="28" class="lg:w-8 lg:h-8" />
                     <div>
-                        <h1 class="text-lg font-bold bg-gradient-to-r from-silver-200 to-silver-400 bg-clip-text text-transparent">
+                        <h1 class="text-base lg:text-lg font-bold bg-gradient-to-r from-silver-200 to-silver-400 bg-clip-text text-transparent">
                             Admin Panel
                         </h1>
                     </div>
@@ -35,65 +35,66 @@
             </div>
 
             <!-- Navigation -->
-            <nav class="flex-1 px-4 py-6 space-y-2">
+            <nav class="flex-1 px-2 lg:px-4 py-4 lg:py-6 space-y-1 lg:space-y-2 overflow-y-auto">
                 <a href="{{ route('admin.dashboard') }}"
-                   class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-blue-600 text-white' : 'text-silver-300 hover:bg-silver-900/30' }}">
-                    <x-phosphor-chart-bar class="w-5 h-5" />
+                   class="flex items-center gap-2 lg:gap-3 px-3 lg:px-4 py-2 lg:py-3 rounded-lg lg:rounded-xl transition-all text-sm lg:text-base {{ request()->routeIs('admin.dashboard') ? 'bg-blue-600 text-white' : 'text-silver-300 hover:bg-silver-900/30' }}">
+                    <x-phosphor-chart-bar class="w-4 h-4 lg:w-5 lg:h-5" />
                     <span class="font-medium">Dashboard</span>
                 </a>
 
                 <a href="{{ route('admin.users.index') }}"
-                   class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.users.*') ? 'bg-blue-600 text-white' : 'text-silver-300 hover:bg-silver-900/30' }}">
-                    <x-phosphor-users class="w-5 h-5" />
+                   class="flex items-center gap-2 lg:gap-3 px-3 lg:px-4 py-2 lg:py-3 rounded-lg lg:rounded-xl transition-all text-sm lg:text-base {{ request()->routeIs('admin.users.*') ? 'bg-blue-600 text-white' : 'text-silver-300 hover:bg-silver-900/30' }}">
+                    <x-phosphor-users class="w-4 h-4 lg:w-5 lg:h-5" />
                     <span class="font-medium">Users</span>
                 </a>
 
                 <a href="{{ route('admin.programs.index') }}"
-                   class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.programs.*') ? 'bg-blue-600 text-white' : 'text-silver-300 hover:bg-silver-900/30' }}">
-                    <x-phosphor-calendar class="w-5 h-5" />
+                   class="flex items-center gap-2 lg:gap-3 px-3 lg:px-4 py-2 lg:py-3 rounded-lg lg:rounded-xl transition-all text-sm lg:text-base {{ request()->routeIs('admin.programs.*') ? 'bg-blue-600 text-white' : 'text-silver-300 hover:bg-silver-900/30' }}">
+                    <x-phosphor-calendar class="w-4 h-4 lg:w-5 lg:h-5" />
                     <span class="font-medium">Programs</span>
                 </a>
 
                 <a href="{{ route('admin.analytics.index') }}"
-                   class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.analytics.*') ? 'bg-blue-600 text-white' : 'text-silver-300 hover:bg-silver-900/30' }}">
-                    <x-phosphor-chart-line class="w-5 h-5" />
+                   class="flex items-center gap-2 lg:gap-3 px-3 lg:px-4 py-2 lg:py-3 rounded-lg lg:rounded-xl transition-all text-sm lg:text-base {{ request()->routeIs('admin.analytics.*') ? 'bg-blue-600 text-white' : 'text-silver-300 hover:bg-silver-900/30' }}">
+                    <x-phosphor-chart-line class="w-4 h-4 lg:w-5 lg:h-5" />
                     <span class="font-medium">Analytics</span>
                 </a>
 
                 <a href="{{ route('admin.logs.index') }}"
-                   class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.logs.*') ? 'bg-blue-600 text-white' : 'text-silver-300 hover:bg-silver-900/30' }}">
-                    <x-phosphor-clipboard class="w-5 h-5" />
+                   class="flex items-center gap-2 lg:gap-3 px-3 lg:px-4 py-2 lg:py-3 rounded-lg lg:rounded-xl transition-all text-sm lg:text-base {{ request()->routeIs('admin.logs.*') ? 'bg-blue-600 text-white' : 'text-silver-300 hover:bg-silver-900/30' }}">
+                    <x-phosphor-clipboard class="w-4 h-4 lg:w-5 lg:h-5" />
                     <span class="font-medium">Daily Logs</span>
                 </a>
 
                 <a href="{{ route('admin.milestones.index') }}"
-                   class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.milestones.*') ? 'bg-blue-600 text-white' : 'text-silver-300 hover:bg-silver-900/30' }}">
-                    <x-phosphor-trophy class="w-5 h-5" />
+                   class="flex items-center gap-2 lg:gap-3 px-3 lg:px-4 py-2 lg:py-3 rounded-lg lg:rounded-xl transition-all text-sm lg:text-base {{ request()->routeIs('admin.milestones.*') ? 'bg-blue-600 text-white' : 'text-silver-300 hover:bg-silver-900/30' }}">
+                    <x-phosphor-trophy class="w-4 h-4 lg:w-5 lg:h-5" />
                     <span class="font-medium">Milestones</span>
                 </a>
 
-                <a href="{{ route('admin.glow-scans.index') }}"
-                   class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.glow-scans.*') ? 'bg-blue-600 text-white' : 'text-silver-300 hover:bg-silver-900/30' }}">
-                    <x-phosphor-sparkle class="w-5 h-5" />
+                {{-- Glow Scans - Hidden for now --}}
+                {{-- <a href="{{ route('admin.glow-scans.index') }}"
+                   class="flex items-center gap-2 lg:gap-3 px-3 lg:px-4 py-2 lg:py-3 rounded-lg lg:rounded-xl transition-all text-sm lg:text-base {{ request()->routeIs('admin.glow-scans.*') ? 'bg-blue-600 text-white' : 'text-silver-300 hover:bg-silver-900/30' }}">
+                    <x-phosphor-sparkle class="w-4 h-4 lg:w-5 lg:h-5" />
                     <span class="font-medium">Glow Scans</span>
-                </a>
+                </a> --}}
 
                 <a href="{{ route('admin.exports.index') }}"
-                   class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.exports.*') ? 'bg-blue-600 text-white' : 'text-silver-300 hover:bg-silver-900/30' }}">
-                    <x-phosphor-download class="w-5 h-5" />
+                   class="flex items-center gap-2 lg:gap-3 px-3 lg:px-4 py-2 lg:py-3 rounded-lg lg:rounded-xl transition-all text-sm lg:text-base {{ request()->routeIs('admin.exports.*') ? 'bg-blue-600 text-white' : 'text-silver-300 hover:bg-silver-900/30' }}">
+                    <x-phosphor-download class="w-4 h-4 lg:w-5 lg:h-5" />
                     <span class="font-medium">Exports</span>
                 </a>
 
                 <a href="{{ route('admin.recommendations.index') }}"
-                   class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.recommendations.*') ? 'bg-blue-600 text-white' : 'text-silver-300 hover:bg-silver-900/30' }}">
-                    <x-phosphor-package class="w-5 h-5" />
-                    <span class="font-medium">Recommendations</span>
+                   class="flex items-center gap-2 lg:gap-3 px-3 lg:px-4 py-2 lg:py-3 rounded-lg lg:rounded-xl transition-all text-sm lg:text-base {{ request()->routeIs('admin.recommendations.*') ? 'bg-blue-600 text-white' : 'text-silver-300 hover:bg-silver-900/30' }}">
+                    <x-phosphor-package class="w-4 h-4 lg:w-5 lg:h-5" />
+                    <span class="font-medium">Product Recommendations</span>
                 </a>
 
                 <a href="{{ route('admin.settings.index') }}"
-                   class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.settings.*') ? 'bg-blue-600 text-white' : 'text-silver-300 hover:bg-silver-900/30' }}">
-                    <x-phosphor-gear class="w-5 h-5" />
-                    <span class="font-medium">Settings</span>
+                   class="flex items-center gap-2 lg:gap-3 px-3 lg:px-4 py-2 lg:py-3 rounded-lg lg:rounded-xl transition-all text-sm lg:text-base {{ request()->routeIs('admin.settings.*') ? 'bg-blue-600 text-white' : 'text-silver-300 hover:bg-silver-900/30' }}">
+                    <x-phosphor-gear class="w-4 h-4 lg:w-5 lg:h-5" />
+                    <span class="font-medium">Settings & Links</span>
                 </a>
             </nav>
         </aside>
