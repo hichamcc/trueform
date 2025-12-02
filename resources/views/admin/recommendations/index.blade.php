@@ -33,7 +33,6 @@
                                     @elseif($recommendation->kpi === 'focus') bg-blue-900/30 text-blue-400 border border-blue-500/30
                                     @elseif($recommendation->kpi === 'sleep') bg-purple-900/30 text-purple-400 border border-purple-500/30
                                     @elseif($recommendation->kpi === 'gut_health') bg-orange-900/30 text-orange-400 border border-orange-500/30
-                                    @elseif($recommendation->kpi === 'skin_glow') bg-pink-900/30 text-pink-400 border border-pink-500/30
                                     @endif">
                                     {{ $recommendation->getKpiDisplayName() }}
                                 </span>

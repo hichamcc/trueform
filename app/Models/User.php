@@ -76,6 +76,11 @@ class User extends Authenticatable
         return $this->hasMany(GlowScan::class);
     }
 
+    public function skinAssessments()
+    {
+        return $this->hasMany(SkinAssessment::class);
+    }
+
     /**
      * Get referrals made by this user (people they referred)
      */
@@ -106,6 +111,22 @@ class User extends Authenticatable
     public function referredUsers()
     {
         return $this->hasMany(User::class, 'referred_by');
+    }
+
+    /**
+     * Get monthly rewards earned by this user
+     */
+    public function monthlyRewards()
+    {
+        return $this->hasMany(ReferralMonthlyReward::class, 'referrer_id');
+    }
+
+    /**
+     * Get free months earned by this user
+     */
+    public function freeMonths()
+    {
+        return $this->hasMany(ReferralFreeMonth::class);
     }
 
     /**
@@ -140,11 +161,39 @@ class User extends Authenticatable
         $rewarded = $this->referralsMade()->where('status', 'rewarded')->count();
         $pending = $this->referralsMade()->where('status', 'pending')->count();
 
+        // Calculate total earned from monthly rewards
+        $totalEarned = $this->monthlyRewards()->sum('reward_amount');
+
         return [
             'total' => $total,
             'completed' => $completed,
             'rewarded' => $rewarded,
             'pending' => $pending,
+            'total_earned' => $totalEarned,
         ];
+    }
+
+    /**
+     * Check if user has earned a free month at this milestone
+     */
+    public function checkAndAwardFreeMonth(int $completedReferralsCount): void
+    {
+        // Every 3 successful referrals = 1 free month
+        if ($completedReferralsCount > 0 && $completedReferralsCount % 3 === 0) {
+            // Check if we haven't already awarded this milestone
+            $alreadyAwarded = $this->freeMonths()
+                ->where('referral_milestone', $completedReferralsCount)
+                ->exists();
+
+            if (!$alreadyAwarded) {
+                // Award the free month
+                ReferralFreeMonth::create([
+                    'user_id' => $this->id,
+                    'earned_at' => now(),
+                    'referral_milestone' => $completedReferralsCount,
+                    'expires_at' => now()->addMonths(12), // Expires in 12 months if not used
+                ]);
+            }
+        }
     }
 }

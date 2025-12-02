@@ -64,6 +64,18 @@ class WelcomeController extends Controller
             ? $todayLog->mito_age_score
             : ($baseline ? $baseline->mito_age_score : null);
 
+        // Get skin assessment data
+        $latestSkinAssessment = $user->skinAssessments()->latest('assessment_date')->first();
+        $baselineSkinAssessment = $user->skinAssessments()->where('milestone_day', 0)->first();
+
+        $currentSkinScore = $latestSkinAssessment?->skin_score;
+        $baselineSkinScore = $baselineSkinAssessment?->skin_score;
+        $skinScoreChange = null;
+
+        if ($currentSkinScore && $baselineSkinScore) {
+            $skinScoreChange = $currentSkinScore - $baselineSkinScore;
+        }
+
         // Calculate Transformation Glow Percentage (0-100%)
         $transformationPercentage = 0;
         if ($baseline && $recentLogs->count() > 0) {
@@ -72,17 +84,15 @@ class WelcomeController extends Controller
             $avgFocus = $recentLogs->avg('focus');
             $avgSleep = $recentLogs->avg('sleep');
             $avgGutHealth = $recentLogs->avg('gut_health');
-            $avgSkinGlow = $recentLogs->avg('skin_glow');
 
             // Calculate overall improvement percentage from baseline
             $energyImprovement = $baseline->energy > 0 ? (($avgEnergy - $baseline->energy) / $baseline->energy) * 100 : 0;
             $focusImprovement = $baseline->focus > 0 ? (($avgFocus - $baseline->focus) / $baseline->focus) * 100 : 0;
             $sleepImprovement = $baseline->sleep > 0 ? (($avgSleep - $baseline->sleep) / $baseline->sleep) * 100 : 0;
             $gutImprovement = $baseline->gut_health > 0 ? (($avgGutHealth - $baseline->gut_health) / $baseline->gut_health) * 100 : 0;
-            $glowImprovement = $baseline->skin_glow > 0 ? (($avgSkinGlow - $baseline->skin_glow) / $baseline->skin_glow) * 100 : 0;
 
             // Average improvement across all metrics
-            $avgImprovement = ($energyImprovement + $focusImprovement + $sleepImprovement + $gutImprovement + $glowImprovement) / 5;
+            $avgImprovement = ($energyImprovement + $focusImprovement + $sleepImprovement + $gutImprovement) / 4;
 
             // Convert to 0-100 scale (assuming max realistic improvement is 50%)
             // Normalize: -50% to +50% improvement maps to 0-100%
@@ -101,7 +111,12 @@ class WelcomeController extends Controller
             'recentLogs',
             'milestones',
             'currentMitoAge',
-            'transformationPercentage'
+            'transformationPercentage',
+            'latestSkinAssessment',
+            'baselineSkinAssessment',
+            'currentSkinScore',
+            'baselineSkinScore',
+            'skinScoreChange'
         ));
     }
 }

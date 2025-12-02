@@ -102,12 +102,12 @@
                 <div class="mt-4 lg:mt-6 pt-3 lg:pt-4 border-t border-[#2a2a3e]">
                     <p class="px-3 lg:px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 lg:mb-2">Tools & Rewards</p>
 
-                    <a href="#"
-                       class="flex items-center px-3 lg:px-4 py-2 lg:py-3 rounded-lg transition-all text-sm lg:text-base text-gray-400 hover:bg-gray-800/50 hover:text-silver-300">
+                    <a href="{{ route('dashboard.skin-assessment.index') }}"
+                       class="flex items-center px-3 lg:px-4 py-2 lg:py-3 rounded-lg transition-all text-sm lg:text-base {{ request()->routeIs('dashboard.skin-assessment.*') ? 'bg-silver-900/20 text-silver-300 border-l-4 border-silver-400' : 'text-gray-400 hover:bg-gray-800/50 hover:text-silver-300' }}">
                         <svg class="w-4 h-4 lg:w-5 lg:h-5 mr-2 lg:mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                         </svg>
-                        Glow Scan
+                        Skin Glow Assessment
                     </a>
 
                     <a href="{{ route('dashboard.referral') }}"

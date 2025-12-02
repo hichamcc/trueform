@@ -9,13 +9,11 @@ use Illuminate\Http\Request;
 class CommunityController extends Controller
 {
     /**
-     * Display community resources, support tools, and external integrations
+     * Display community resources and support tools
      *
      * Features:
-     * - Glow Scan (AI skin analysis) - Configurable via admin settings
-     * - Case Study submission (Google Form) - Configurable via admin settings
      * - Community platform access (Discord/Forum) - Configurable via admin settings
-     * - Referral program - Configurable via admin settings
+     * - Community benefits showcase
      * - FAQ section
      * - Support contact information - Configurable via admin settings
      */
@@ -32,18 +30,11 @@ class CommunityController extends Controller
         // External resources and integrations (pulled from database settings)
         $resources = [
             [
-                'title' => 'Submit Case Study',
-                'description' => 'Share your 360-day transformation journey and inspire others',
-                'icon' => 'document-text',
-                'url' => Setting::get('case_study_url', '#'),
-                'type' => 'primary'
-            ],
-            [
                 'title' => 'Join Community',
                 'description' => 'Connect with others on their wellness journey',
                 'icon' => 'users',
                 'url' => Setting::get('community_url', '#'),
-                'type' => 'secondary'
+                'type' => 'primary'
             ],
         ];
 

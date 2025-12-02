@@ -31,7 +31,7 @@
                 @if (Route::has('login'))
                     <div class="hidden lg:flex items-center gap-4">
                         @auth
-                            <a href="{{ url('/dashboard') }}" class="px-6 py-2.5 text-sm font-medium text-silver-100 hover:text-white transition-colors">
+                            <a href="{{ auth()->user()->is_admin ? url('/admin') : url('/dashboard') }}" class="px-6 py-2.5 text-sm font-medium text-silver-100 hover:text-white transition-colors">
                                 Dashboard
                             </a>
                         @else
@@ -55,7 +55,7 @@
             <div id="mobile-menu" class="hidden lg:hidden border-t border-silver-900/30 bg-[#0a0a0a]">
                 <div class="px-4 py-4 space-y-3">
                     @auth
-                        <a href="{{ url('/dashboard') }}" class="block px-4 py-2.5 text-sm font-medium text-silver-100 hover:bg-silver-900/20 rounded-lg transition-colors">
+                        <a href="{{ auth()->user()->is_admin ? url('/admin') : url('/dashboard') }}" class="block px-4 py-2.5 text-sm font-medium text-silver-100 hover:bg-silver-900/20 rounded-lg transition-colors">
                             Dashboard
                         </a>
                     @else

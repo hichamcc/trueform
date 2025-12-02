@@ -27,7 +27,6 @@
                     <option value="focus">Focus</option>
                     <option value="sleep">Sleep</option>
                     <option value="gut_health">Gut Health</option>
-                    <option value="skin_glow">Skin Glow</option>
                 </select>
                 <p class="text-xs text-silver-500 mt-1">Which wellness metric does this product help with?</p>
             </div>

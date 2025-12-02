@@ -58,7 +58,6 @@ class ProgressController extends Controller
             'focus' => $allLogs->pluck('focus')->toArray(),
             'sleep' => $allLogs->pluck('sleep')->toArray(),
             'gut_health' => $allLogs->pluck('gut_health')->toArray(),
-            'skin_glow' => $allLogs->pluck('skin_glow')->toArray(),
             'mito_age_score' => $allLogs->pluck('mito_age_score')->toArray(),
         ];
 
@@ -92,7 +91,7 @@ class ProgressController extends Controller
      */
     private function calculateComparisons($baseline, $latestLog): array
     {
-        $metrics = ['energy', 'focus', 'sleep', 'gut_health', 'skin_glow', 'mito_age_score'];
+        $metrics = ['energy', 'focus', 'sleep', 'gut_health', 'mito_age_score'];
         $comparisons = [];
 
         foreach ($metrics as $metric) {
@@ -147,7 +146,6 @@ class ProgressController extends Controller
                     'focus' => $this->calculateMetricImprovement($baseline->focus, $logs->avg('focus')),
                     'sleep' => $this->calculateMetricImprovement($baseline->sleep, $logs->avg('sleep')),
                     'gut_health' => $this->calculateMetricImprovement($baseline->gut_health, $logs->avg('gut_health')),
-                    'skin_glow' => $this->calculateMetricImprovement($baseline->skin_glow, $logs->avg('skin_glow')),
                     'mito_age_score' => $this->calculateMetricImprovement($baseline->mito_age_score, $logs->avg('mito_age_score')),
                 ];
             } else {

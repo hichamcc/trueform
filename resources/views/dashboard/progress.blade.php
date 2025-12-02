@@ -5,22 +5,66 @@
 
 @section('content')
 <div class="space-y-6">
-    <!-- Stage Indicator -->
+    <!-- Progress Bars Section -->
     @if($enrollment)
-        <div class="bg-gradient-to-r {{ $stageTheme['gradient'] ?? 'from-green-600 to-green-500' }} rounded-xl p-6 shadow-xl">
-            <div class="flex items-center justify-between">
-                <div>
-                    <div class="flex items-center space-x-3 mb-2">
-                        <span class="px-4 py-1 glass-light rounded-full text-white text-sm font-semibold">
-                            Stage {{ $currentStage }} of 3
-                        </span>
-                        <span class="text-white/90 text-sm">{{ $stageName }}</span>
+        @php
+            $currentDayForCalc = $enrollment->getCurrentDay();
+            $eliteProgress = ($currentDayForCalc / 360) * 100;
+
+            // Calculate stage progress (resets every 90 days)
+            if ($currentDayForCalc <= 90) {
+                $stageProgress = ($currentDayForCalc / 90) * 100;
+                $stageDaysCurrent = $currentDayForCalc;
+                $stageDaysTotal = 90;
+            } elseif ($currentDayForCalc <= 180) {
+                $stageProgress = (($currentDayForCalc - 90) / 90) * 100;
+                $stageDaysCurrent = $currentDayForCalc - 90;
+                $stageDaysTotal = 90;
+            } else {
+                $stageProgress = (($currentDayForCalc - 180) / 180) * 100;
+                $stageDaysCurrent = $currentDayForCalc - 180;
+                $stageDaysTotal = 180;
+            }
+        @endphp
+
+        <div class="space-y-4">
+            <!-- Elite Progress Bar (Small - Reference) -->
+            <div class="bg-gradient-to-br from-[#141414] to-[#0f0f0f] rounded-xl p-4 border border-[#2a2a2a]">
+                <div class="flex items-center justify-between mb-2">
+                    <div>
+                        <p class="text-xs text-silver-400">Elite Progress (360-Day Journey)</p>
                     </div>
-                    <h2 class="text-2xl font-bold text-white">Your Progress Through the Stages</h2>
+                    <div class="text-right">
+                        <p class="text-lg font-bold text-silver-300">{{ number_format($eliteProgress, 0) }}%</p>
+                        <p class="text-xs text-gray-500">Day {{ $currentDayForCalc }}/360</p>
+                    </div>
                 </div>
-                <div class="text-right">
-                    <div class="text-white/80 text-sm mb-1">Total Program Progress</div>
-                    <div class="text-3xl font-bold text-white">{{ $enrollment->getCurrentDay() }}/360 Days</div>
+                <div class="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+                    <div class="bg-gradient-to-r from-silver-600 to-silver-400 h-full rounded-full transition-all duration-500"
+                         style="width: {{ $eliteProgress }}%"></div>
+                </div>
+            </div>
+
+            <!-- Stage Progress Bar (Large - Main Focus) -->
+            <div class="bg-gradient-to-r {{ $stageTheme['gradient'] ?? 'from-green-600 to-green-500' }} rounded-2xl p-6 shadow-xl">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-1">
+                            <span class="px-3 py-1 glass-light rounded-full text-white text-xs font-semibold">
+                                Stage {{ $currentStage }} of 3
+                            </span>
+                        </div>
+                        <h2 class="text-2xl font-bold text-white">{{ $stageName }} – {{ number_format($stageProgress, 0) }}% Complete</h2>
+                        <p class="text-white/80 text-sm mt-1">Your current 90-day stage progress</p>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-4xl font-bold text-white">{{ number_format($stageProgress, 0) }}%</div>
+                        <div class="text-white/80 text-sm mt-1">Day {{ $stageDaysCurrent }}/{{ $stageDaysTotal }}</div>
+                    </div>
+                </div>
+                <div class="w-full bg-white/20 rounded-full h-4 overflow-hidden">
+                    <div class="bg-white h-full rounded-full transition-all duration-500"
+                         style="width: {{ $stageProgress }}%"></div>
                 </div>
             </div>
         </div>
@@ -63,7 +107,7 @@
 
                             <!-- Individual Metrics -->
                             <div class="space-y-2">
-                                @foreach(['energy' => 'Energy', 'focus' => 'Focus', 'sleep' => 'Sleep', 'gut_health' => 'Gut', 'skin_glow' => 'Glow'] as $metric => $label)
+                                @foreach(['energy' => 'Energy', 'focus' => 'Focus', 'sleep' => 'Sleep', 'gut_health' => 'Gut'] as $metric => $label)
                                     <div class="flex items-center justify-between text-sm">
                                         <span class="text-silver-400">{{ $label }}</span>
                                         <span class="font-semibold {{ $improvements[$key][$metric] >= 0 ? 'text-green-400' : 'text-red-400' }}">
@@ -113,7 +157,7 @@
         <div class="bg-[#141414] rounded-xl p-6 border border-[#2a2a2a]">
             <h3 class="text-xl font-semibold text-silver-300 mb-6">Detailed Metrics Comparison</h3>
             <div class="space-y-6">
-                @foreach(['energy' => 'Energy Level', 'focus' => 'Mental Focus', 'sleep' => 'Sleep Quality', 'gut_health' => 'Gut Health', 'skin_glow' => 'Skin Glow'] as $key => $label)
+                @foreach(['energy' => 'Energy Level', 'focus' => 'Mental Focus', 'sleep' => 'Sleep Quality', 'gut_health' => 'Gut Health'] as $key => $label)
                     <div>
                         <div class="flex items-center justify-between mb-3">
                             <span class="text-silver-300 font-medium">{{ $label }}</span>
@@ -185,8 +229,7 @@
                         energy: @json($chartData['energy']),
                         focus: @json($chartData['focus']),
                         sleep: @json($chartData['sleep']),
-                        gut_health: @json($chartData['gut_health']),
-                        skin_glow: @json($chartData['skin_glow'])
+                        gut_health: @json($chartData['gut_health'])
                     };
 
                     console.log('Metrics Data:', metricsData);
@@ -226,6 +269,8 @@
                 3 => ['name' => 'Stage 3: Mastery', 'days' => [270, 360], 'color' => ['bg' => 'bg-yellow-900/10', 'border' => 'border-yellow-500/50', 'text' => 'text-yellow-400', 'badge' => 'from-yellow-500 to-yellow-600']],
             ];
             $currentDayVal = $enrollment ? $enrollment->getCurrentDay() : 0;
+            // Only these milestones have rewards
+            $rewardMilestones = [90, 180, 360];
         @endphp
 
         @foreach($stageGroups as $stageNum => $stage)
@@ -242,6 +287,7 @@
                             $milestone = $milestones->where('milestone_day', $day)->first();
                             $isUnlocked = $milestone && $milestone->unlocked_at;
                             $daysUntil = max(0, $day - $currentDayVal);
+                            $hasReward = in_array($day, $rewardMilestones);
                         @endphp
                         <div class="relative flex items-start p-6 rounded-lg border {{ $isUnlocked ? $stage['color']['bg'] . ' ' . $stage['color']['border'] : 'bg-[#0f0f0f] border-[#2a2a2a]' }}">
                             <!-- Badge -->
@@ -262,9 +308,16 @@
                             <!-- Content -->
                             <div class="flex-1">
                                 <div class="flex items-center justify-between mb-2">
-                                    <h4 class="text-lg font-semibold {{ $isUnlocked ? $stage['color']['text'] : 'text-silver-300' }}">
-                                        {{ $milestone->reward_title ?? "Day {$day} Milestone" }}
-                                    </h4>
+                                    <div class="flex items-center gap-2">
+                                        <h4 class="text-lg font-semibold {{ $isUnlocked ? $stage['color']['text'] : 'text-silver-300' }}">
+                                            {{ $milestone->reward_title ?? "Day {$day} Milestone" }}
+                                        </h4>
+                                        @if($hasReward)
+                                            <span class="px-2 py-0.5 bg-yellow-900/30 text-yellow-400 text-xs rounded-full">
+                                                Reward
+                                            </span>
+                                        @endif
+                                    </div>
                                     @if($isUnlocked)
                                         <span class="px-3 py-1 {{ $stage['color']['bg'] }} {{ $stage['color']['text'] }} text-sm rounded-full">
                                             Unlocked {{ $milestone->unlocked_at->diffForHumans() }}
@@ -281,19 +334,32 @@
                                 </div>
 
                                 <p class="text-gray-400 text-sm mb-3">
-                                    {{ $milestone->reward_description ?? "Complete {$day} days of consistent tracking to unlock this milestone and earn your reward." }}
+                                    @if($hasReward)
+                                        {{ $milestone->reward_description ?? "Complete {$day} days of consistent tracking to unlock this milestone and earn your reward." }}
+                                    @else
+                                        Complete {{ $day }} days of consistent tracking to unlock this milestone.
+                                    @endif
                                 </p>
 
-                                @if($isUnlocked && !$milestone->reward_claimed)
-                                    <button class="px-4 py-2 bg-gradient-to-r {{ $stage['color']['badge'] }} hover:opacity-90 text-white text-sm rounded-lg transition">
-                                        Claim Reward
-                                    </button>
-                                @elseif($isUnlocked && $milestone->reward_claimed)
+                                @if($hasReward)
+                                    @if($isUnlocked && !$milestone->reward_claimed)
+                                        <button class="px-4 py-2 bg-gradient-to-r {{ $stage['color']['badge'] }} hover:opacity-90 text-white text-sm rounded-lg transition">
+                                            Claim Reward
+                                        </button>
+                                    @elseif($isUnlocked && $milestone->reward_claimed)
+                                        <div class="text-sm {{ $stage['color']['text'] }} flex items-center">
+                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                            </svg>
+                                            Reward Claimed
+                                        </div>
+                                    @endif
+                                @elseif($isUnlocked)
                                     <div class="text-sm {{ $stage['color']['text'] }} flex items-center">
                                         <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                                         </svg>
-                                        Reward Claimed
+                                        Milestone Achieved
                                     </div>
                                 @endif
                             </div>

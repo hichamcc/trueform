@@ -85,6 +85,12 @@
                     <span class="font-medium">Exports</span>
                 </a>
 
+                <a href="{{ route('admin.referrals.index') }}"
+                   class="flex items-center gap-2 lg:gap-3 px-3 lg:px-4 py-2 lg:py-3 rounded-lg lg:rounded-xl transition-all text-sm lg:text-base {{ request()->routeIs('admin.referrals.*') ? 'bg-blue-600 text-white' : 'text-silver-300 hover:bg-silver-900/30' }}">
+                    <x-phosphor-share-network class="w-4 h-4 lg:w-5 lg:h-5" />
+                    <span class="font-medium">Referrals</span>
+                </a>
+
                 <a href="{{ route('admin.recommendations.index') }}"
                    class="flex items-center gap-2 lg:gap-3 px-3 lg:px-4 py-2 lg:py-3 rounded-lg lg:rounded-xl transition-all text-sm lg:text-base {{ request()->routeIs('admin.recommendations.*') ? 'bg-blue-600 text-white' : 'text-silver-300 hover:bg-silver-900/30' }}">
                     <x-phosphor-package class="w-4 h-4 lg:w-5 lg:h-5" />

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Referral;
+use App\Mail\ReferralInvitation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -72,11 +73,18 @@ class ReferralController extends Controller
             'status' => 'pending',
         ]);
 
-        // TODO: Send invitation email
-        // Mail::to($validated['email'])->send(new ReferralInvitation($user, $referralCode));
+        // Send invitation email
+        try {
+            Mail::to($validated['email'])->send(new ReferralInvitation($user, $referralCode));
+            $message = 'Invitation sent successfully!';
+        } catch (\Exception $e) {
+            // Log error but still show success to user
+            \Log::error('Failed to send referral email: ' . $e->getMessage());
+            $message = 'Referral tracked! (Email sending is not configured yet)';
+        }
 
         return redirect()->route('dashboard.referral')
-            ->with('success', 'Invitation sent successfully!');
+            ->with('success', $message);
     }
 
     public function copyLink(Request $request)

@@ -47,7 +47,6 @@ class TransformationProfileController extends Controller
                     'focus' => round($last7Days->avg('focus'), 1),
                     'sleep' => round($last7Days->avg('sleep'), 1),
                     'gut_health' => round($last7Days->avg('gut_health'), 1),
-                    'skin_glow' => round($last7Days->avg('skin_glow'), 1),
                     'mito_age_score' => round($last7Days->avg('mito_age_score'), 1),
                 ];
 
@@ -57,7 +56,6 @@ class TransformationProfileController extends Controller
                     'focus' => (($currentAverages['focus'] - $baseline->focus) / $baseline->focus) * 100,
                     'sleep' => (($currentAverages['sleep'] - $baseline->sleep) / $baseline->sleep) * 100,
                     'gut_health' => (($currentAverages['gut_health'] - $baseline->gut_health) / $baseline->gut_health) * 100,
-                    'skin_glow' => (($currentAverages['skin_glow'] - $baseline->skin_glow) / $baseline->skin_glow) * 100,
                 ];
 
                 // Overall improvement

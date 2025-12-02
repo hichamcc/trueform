@@ -28,7 +28,6 @@
                     <option value="focus" {{ $recommendation->kpi === 'focus' ? 'selected' : '' }}>Focus</option>
                     <option value="sleep" {{ $recommendation->kpi === 'sleep' ? 'selected' : '' }}>Sleep</option>
                     <option value="gut_health" {{ $recommendation->kpi === 'gut_health' ? 'selected' : '' }}>Gut Health</option>
-                    <option value="skin_glow" {{ $recommendation->kpi === 'skin_glow' ? 'selected' : '' }}>Skin Glow</option>
                 </select>
                 <p class="text-xs text-silver-500 mt-1">Which wellness metric does this product help with?</p>
             </div>

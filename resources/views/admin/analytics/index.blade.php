@@ -26,10 +26,6 @@
                 <p class="text-2xl font-bold text-green-400 mt-1">+{{ number_format($metricsImprovement->gut_health_improvement ?? 0, 1) }}</p>
             </div>
             <div>
-                <p class="text-silver-500 text-sm">Skin Glow</p>
-                <p class="text-2xl font-bold text-green-400 mt-1">+{{ number_format($metricsImprovement->skin_glow_improvement ?? 0, 1) }}</p>
-            </div>
-            <div>
                 <p class="text-silver-500 text-sm">Overall</p>
                 <p class="text-2xl font-bold text-green-400 mt-1">+{{ number_format($metricsImprovement->overall_improvement ?? 0, 1) }}</p>
             </div>

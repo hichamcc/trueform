@@ -27,16 +27,16 @@
         <p class="text-gray-400 text-lg">Connect, share, and grow with the True Form community</p>
     </div>
 
-    <!-- Resource Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Community Link Card -->
+    <div class="max-w-2xl mx-auto">
         @foreach($resources as $resource)
             <a href="{{ $resource['url'] }}"
                class="block group relative overflow-hidden rounded-2xl border transition-all duration-300
                       {{ $resource['type'] === 'primary' ? 'bg-gradient-to-br from-silver-600 to-silver-700 border-silver-500 hover:from-silver-500 hover:to-silver-600 shadow-xl' : ($resource['type'] === 'accent' ? 'bg-gradient-to-br from-purple-900 to-purple-800 border-purple-700 hover:from-purple-800 hover:to-purple-700' : 'bg-[#141414] border-[#2a2a2a] hover:border-silver-700') }}">
-                <div class="p-8">
+                <div class="p-10 text-center">
                     <!-- Icon -->
-                    <div class="mb-6">
-                        <div class="w-16 h-16 rounded-2xl flex items-center justify-center
+                    <div class="mb-6 flex justify-center">
+                        <div class="w-20 h-20 rounded-2xl flex items-center justify-center
                                     {{ $resource['type'] === 'primary' ? 'bg-white/20' : ($resource['type'] === 'accent' ? 'bg-purple-700/50' : 'bg-silver-900/30') }}">
                             @if($resource['icon'] === 'sparkles')
                                 <svg class="w-8 h-8 {{ $resource['type'] === 'primary' || $resource['type'] === 'accent' ? 'text-white' : 'text-silver-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -47,7 +47,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                 </svg>
                             @elseif($resource['icon'] === 'users')
-                                <svg class="w-8 h-8 {{ $resource['type'] === 'primary' || $resource['type'] === 'accent' ? 'text-white' : 'text-silver-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-10 h-10 {{ $resource['type'] === 'primary' || $resource['type'] === 'accent' ? 'text-white' : 'text-silver-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </svg>
                             @elseif($resource['icon'] === 'gift')
@@ -67,9 +67,9 @@
                     </p>
 
                     <!-- Arrow -->
-                    <div class="mt-6 flex items-center {{ $resource['type'] === 'primary' || $resource['type'] === 'accent' ? 'text-white' : 'text-silver-400' }} group-hover:translate-x-2 transition-transform">
-                        <span class="mr-2 font-medium">Get Started</span>
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="mt-6 flex items-center justify-center {{ $resource['type'] === 'primary' || $resource['type'] === 'accent' ? 'text-white' : 'text-silver-400' }} group-hover:translate-x-2 transition-transform">
+                        <span class="mr-2 font-semibold text-lg">Join Now</span>
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                         </svg>
                     </div>
@@ -81,25 +81,62 @@
         @endforeach
     </div>
 
-    <!-- Community Stats -->
-    <div class="bg-[#141414] rounded-xl p-6 border border-[#2a2a2a]">
-        <h3 class="text-xl font-semibold text-silver-300 mb-6">Community Impact</h3>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div class="text-center">
-                <div class="text-3xl font-bold text-silver-300 mb-1">10,000+</div>
-                <div class="text-sm text-gray-500">Active Members</div>
+    <!-- Inside the TrueForm Elite Community -->
+    <div class="bg-gradient-to-br from-[#141414] to-[#0f0f0f] rounded-2xl p-8 border border-[#2a2a2a]">
+        <h3 class="text-2xl font-bold bg-gradient-to-r from-silver-200 to-silver-400 bg-clip-text text-transparent mb-6">
+            Inside the TrueForm Elite Community
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Item 1 -->
+            <div class="flex items-start space-x-4 p-4 bg-[#16213e] rounded-xl hover:bg-[#1a1a2e] transition">
+                <div class="w-12 h-12 bg-green-600/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </div>
+                <div>
+                    <h4 class="text-base font-semibold text-silver-200 mb-1">Early Access to New Programs</h4>
+                    <p class="text-sm text-gray-400">Be the first to access new programs & product drops</p>
+                </div>
             </div>
-            <div class="text-center">
-                <div class="text-3xl font-bold text-silver-300 mb-1">500+</div>
-                <div class="text-sm text-gray-500">Transformation Stories</div>
+
+            <!-- Item 2 -->
+            <div class="flex items-start space-x-4 p-4 bg-[#16213e] rounded-xl hover:bg-[#1a1a2e] transition">
+                <div class="w-12 h-12 bg-blue-600/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                    </svg>
+                </div>
+                <div>
+                    <h4 class="text-base font-semibold text-silver-200 mb-1">Member-Exclusive Wellness Tips</h4>
+                    <p class="text-sm text-gray-400">Expert insights and wellness strategies for elite members</p>
+                </div>
             </div>
-            <div class="text-center">
-                <div class="text-3xl font-bold text-silver-300 mb-1">8.7/10</div>
-                <div class="text-sm text-gray-500">Avg. Improvement</div>
+
+            <!-- Item 3 -->
+            <div class="flex items-start space-x-4 p-4 bg-[#16213e] rounded-xl hover:bg-[#1a1a2e] transition">
+                <div class="w-12 h-12 bg-purple-600/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <h4 class="text-base font-semibold text-silver-200 mb-1">Progress Inspiration</h4>
+                    <p class="text-sm text-gray-400">Connect with and get inspired by other members' journeys</p>
+                </div>
             </div>
-            <div class="text-center">
-                <div class="text-3xl font-bold text-silver-300 mb-1">92%</div>
-                <div class="text-sm text-gray-500">Completion Rate</div>
+
+            <!-- Item 4 -->
+            <div class="flex items-start space-x-4 p-4 bg-[#16213e] rounded-xl hover:bg-[#1a1a2e] transition">
+                <div class="w-12 h-12 bg-yellow-600/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+                    </svg>
+                </div>
+                <div>
+                    <h4 class="text-base font-semibold text-silver-200 mb-1">Exclusive Giveaways & Rewards</h4>
+                    <p class="text-sm text-gray-400">Access milestone rewards and member-only giveaways</p>
+                </div>
             </div>
         </div>
     </div>
@@ -108,42 +145,6 @@
     <div class="bg-[#141414] rounded-xl p-6 border border-[#2a2a2a]">
         <h3 class="text-xl font-semibold text-silver-300 mb-6">Frequently Asked Questions</h3>
         <div class="space-y-4">
-            <details class="group">
-                <summary class="flex items-center justify-between cursor-pointer p-4 bg-[#16213e] rounded-lg hover:bg-[#141414] transition">
-                    <span class="text-silver-300 font-medium">How do I submit my transformation story?</span>
-                    <svg class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                </summary>
-                <div class="p-4 text-gray-400 text-sm">
-                    Click the "Submit Case Study" button above to access our Google Form. Fill out your journey details, upload before/after photos (optional), and share what worked for you. Your story could inspire thousands!
-                </div>
-            </details>
-
-            <details class="group">
-                <summary class="flex items-center justify-between cursor-pointer p-4 bg-[#16213e] rounded-lg hover:bg-[#141414] transition">
-                    <span class="text-silver-300 font-medium">What is the Glow Scan?</span>
-                    <svg class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                </summary>
-                <div class="p-4 text-gray-400 text-sm">
-                    Our AI-powered skin analysis tool uses advanced computer vision to analyze your skin's radiance, texture, and overall glow. Take regular scans to track visible improvements in your skin health over the 90 days.
-                </div>
-            </details>
-
-            <details class="group">
-                <summary class="flex items-center justify-between cursor-pointer p-4 bg-[#16213e] rounded-lg hover:bg-[#141414] transition">
-                    <span class="text-silver-300 font-medium">How does the referral program work?</span>
-                    <svg class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                </summary>
-                <div class="p-4 text-gray-400 text-sm">
-                    Share your unique referral link with friends and family. When they join and complete their first 30 days, you'll both receive exclusive rewards. The more friends you refer, the more rewards you unlock!
-                </div>
-            </details>
-
             <details class="group">
                 <summary class="flex items-center justify-between cursor-pointer p-4 bg-[#16213e] rounded-lg hover:bg-[#141414] transition">
                     <span class="text-silver-300 font-medium">Can I connect with other members?</span>

@@ -53,9 +53,17 @@ class TrackerController extends Controller
             'focus' => 'required|numeric|min:1|max:10',
             'sleep' => 'required|numeric|min:1|max:10',
             'gut_health' => 'required|numeric|min:1|max:10',
-            'skin_glow' => 'required|numeric|min:1|max:10',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // 5MB max
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // 5MB max
+            // Skin assessment fields (optional)
+            'radiance' => 'nullable|numeric|min:1|max:10',
+            'smoothness' => 'nullable|numeric|min:1|max:10',
+            'calmness' => 'nullable|numeric|min:1|max:10',
+            'clarity' => 'nullable|numeric|min:1|max:10',
+            'hydration' => 'nullable|numeric|min:1|max:10',
+            'firmness' => 'nullable|numeric|min:1|max:10',
+            'evenness' => 'nullable|numeric|min:1|max:10',
+            'skin_notes' => 'nullable|string|max:1000',
         ]);
 
         $user = $request->user();
@@ -77,10 +85,52 @@ class TrackerController extends Controller
         }
 
         // Create or update baseline (Mito-Age Score auto-calculated in database)
+        $baselineData = [
+            'energy' => $validated['energy'],
+            'focus' => $validated['focus'],
+            'sleep' => $validated['sleep'],
+            'gut_health' => $validated['gut_health'],
+        ];
+
+        if (isset($validated['image'])) {
+            $baselineData['image'] = $validated['image'];
+        }
+
+        if (isset($validated['photo'])) {
+            $baselineData['photo'] = $validated['photo'];
+        }
+
         Baseline::updateOrCreate(
             ['user_id' => $user->id],
-            $validated
+            $baselineData
         );
+
+        // Create baseline skin assessment if skin data is provided
+        if ($request->filled('radiance')) {
+            $skinAssessmentData = [
+                'milestone_day' => 0, // Baseline
+                'day_in_program' => 0,
+                'assessment_date' => now(),
+                'radiance' => $validated['radiance'],
+                'smoothness' => $validated['smoothness'],
+                'calmness' => $validated['calmness'],
+                'clarity' => $validated['clarity'],
+                'hydration' => $validated['hydration'],
+                'firmness' => $validated['firmness'],
+                'evenness' => $validated['evenness'],
+                'notes' => $validated['skin_notes'] ?? null,
+            ];
+
+            // Use the same photo for skin assessment if uploaded
+            if (isset($validated['photo'])) {
+                $skinAssessmentData['photo'] = $validated['photo'];
+            }
+
+            $user->skinAssessments()->updateOrCreate(
+                ['user_id' => $user->id, 'milestone_day' => 0],
+                $skinAssessmentData
+            );
+        }
 
         // Mark baseline as completed in enrollment
         $enrollment = $user->programEnrollment;
@@ -88,8 +138,13 @@ class TrackerController extends Controller
             $enrollment->update(['baseline_completed' => true]);
         }
 
+        $message = 'Baseline metrics saved successfully!';
+        if ($request->filled('radiance')) {
+            $message .= ' Your baseline skin assessment has also been recorded.';
+        }
+
         return redirect()->route('dashboard.tracker')
-            ->with('success', 'Baseline metrics saved successfully! You can now start logging daily.');
+            ->with('success', $message);
     }
 
     /**
@@ -106,7 +161,6 @@ class TrackerController extends Controller
             'focus' => 'required|numeric|min:1|max:10',
             'sleep' => 'required|numeric|min:1|max:10',
             'gut_health' => 'required|numeric|min:1|max:10',
-            'skin_glow' => 'required|numeric|min:1|max:10',
             'notes' => 'nullable|string|max:1000',
         ]);
 

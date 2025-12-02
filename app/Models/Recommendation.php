@@ -42,7 +42,6 @@ class Recommendation extends Model
             'focus' => 'Focus',
             'sleep' => 'Sleep',
             'gut_health' => 'Gut Health',
-            'skin_glow' => 'Skin Glow',
             default => ucfirst($this->kpi),
         };
     }

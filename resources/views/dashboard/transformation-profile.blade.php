@@ -89,7 +89,7 @@
             <h3 class="text-lg font-bold text-silver-200 mb-4">Metric Breakdown (7-Day Average)</h3>
 
             <div class="space-y-3">
-                @foreach(['energy' => 'Energy', 'focus' => 'Focus', 'sleep' => 'Sleep', 'gut_health' => 'Gut Health', 'skin_glow' => 'Skin Glow'] as $key => $label)
+                @foreach(['energy' => 'Energy', 'focus' => 'Focus', 'sleep' => 'Sleep', 'gut_health' => 'Gut Health'] as $key => $label)
                     @php
                         $baselineVal = $baseline->$key;
                         $currentVal = $currentAverages[$key];

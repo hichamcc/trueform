@@ -14,7 +14,6 @@ class DailyLog extends Model
         'focus',
         'sleep',
         'gut_health',
-        'skin_glow',
         'notes',
     ];
 
@@ -24,7 +23,6 @@ class DailyLog extends Model
         'focus' => 'decimal:1',
         'sleep' => 'decimal:1',
         'gut_health' => 'decimal:1',
-        'skin_glow' => 'decimal:1',
         'mito_age_score' => 'decimal:1',
     ];
 

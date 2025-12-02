@@ -5,20 +5,6 @@
 
 @section('content')
 <div class="space-y-6">
-    <!-- Stage Indicator -->
-    @if($enrollment)
-        <div class="bg-gradient-to-r {{ $stageTheme['gradient'] ?? 'from-green-600 to-green-500' }} rounded-xl p-4 shadow-xl">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <span class="px-3 py-1 glass-light rounded-full text-white text-xs font-semibold">
-                        Stage {{ $currentStage }} - {{ $stageName }}
-                    </span>
-                    <span class="text-white/90 text-sm">Day {{ $enrollment->getCurrentDay() }} of 360</span>
-                </div>
-            </div>
-        </div>
-    @endif
-
     @if(!$baseline)
         <!-- Baseline Setup -->
         <div class="bg-gradient-to-br from-[#141414] to-[#0f0f0f] rounded-2xl p-8 border border-[#2a2a2a]">
@@ -27,7 +13,14 @@
                 <p class="text-gray-400">Before you begin your 90-day journey, let's record your starting metrics. Rate each category from 1-10.</p>
             </div>
 
-            <form action="{{ route('dashboard.tracker.baseline') }}" method="POST" enctype="multipart/form-data" class="space-y-6" x-data="{ energy: 5, focus: 5, sleep: 5, gut_health: 5, skin_glow: 5, imagePreview: null }">
+            <form action="{{ route('dashboard.tracker.baseline') }}" method="POST" enctype="multipart/form-data" class="space-y-6"
+                  x-data="{
+                      energy: 5, focus: 5, sleep: 5, gut_health: 5,
+                      imagePreview: null,
+                      showSkinAssessment: false,
+                      radiance: 5, smoothness: 5, calmness: 5, clarity: 5,
+                      hydration: 5, firmness: 5, evenness: 5
+                  }">
                 @csrf
 
                 <!-- Optional Baseline Photo -->
@@ -140,19 +133,171 @@
                                placeholder="1-10">
                         <p class="text-xs text-gray-500">How comfortable is your digestive system?</p>
                     </div>
+                </div>
 
-                    <!-- Skin Glow -->
-                    <div class="space-y-3">
-                        <label class="block text-silver-300 font-medium flex items-center justify-between">
-                            <span>Skin Glow</span>
-                            <span class="text-2xl font-bold text-pink-400" x-text="skin_glow.toFixed(1)"></span>
-                        </label>
-                        <input type="range" x-model.number="skin_glow" min="1" max="10" step="0.1"
-                               class="w-full bg-transparent rounded-lg appearance-none cursor-pointer slider-pink">
-                        <input type="number" name="skin_glow" x-model.number="skin_glow" min="1" max="10" step="0.1" required
-                               class="w-full px-4 py-3 bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg text-silver-200 focus:border-silver-500 focus:ring-2 focus:ring-silver-500/20"
-                               placeholder="1-10">
-                        <p class="text-xs text-gray-500">How radiant and healthy is your skin?</p>
+                <!-- Baseline Skin Assessment (Optional) -->
+                <div class="bg-[#0f0f0f] rounded-xl p-6 border border-[#2a2a2a]">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="text-lg font-semibold text-silver-300 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                                </svg>
+                                Baseline Skin Assessment
+                            </h3>
+                            <p class="text-sm text-gray-400 mt-1">Optional but recommended - Track your skin transformation</p>
+                        </div>
+                        <button type="button"
+                                @click="showSkinAssessment = !showSkinAssessment"
+                                class="px-4 py-2 text-sm bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 rounded-lg transition-all">
+                            <span x-show="!showSkinAssessment">Add Assessment</span>
+                            <span x-show="showSkinAssessment" x-cloak>Hide Assessment</span>
+                        </button>
+                    </div>
+
+                    <div x-show="showSkinAssessment" x-collapse x-cloak>
+                        <div class="space-y-6 pt-4">
+                            <!-- Radiance -->
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <label class="block text-silver-300 font-medium text-sm">
+                                        How radiant and glowing does your skin look today?
+                                    </label>
+                                    <span class="text-2xl font-bold text-pink-400" x-text="radiance.toFixed(1)"></span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs text-gray-500 whitespace-nowrap">Very poor</span>
+                                    <input type="range" x-model.number="radiance" min="1" max="10" step="0.1"
+                                           class="flex-1 bg-transparent rounded-lg appearance-none cursor-pointer slider-pink">
+                                    <span class="text-xs text-gray-500 whitespace-nowrap">Excellent</span>
+                                </div>
+                                <input type="number" name="radiance" x-model.number="radiance" min="1" max="10" step="0.1"
+                                       class="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-silver-200 text-sm focus:border-silver-500 focus:ring-2 focus:ring-silver-500/20"
+                                       placeholder="1-10">
+                            </div>
+
+                            <!-- Smoothness -->
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <label class="block text-silver-300 font-medium text-sm">
+                                        How smooth does your skin texture feel today?
+                                    </label>
+                                    <span class="text-2xl font-bold text-blue-400" x-text="smoothness.toFixed(1)"></span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs text-gray-500 whitespace-nowrap">Very poor</span>
+                                    <input type="range" x-model.number="smoothness" min="1" max="10" step="0.1"
+                                           class="flex-1 bg-transparent rounded-lg appearance-none cursor-pointer slider-blue">
+                                    <span class="text-xs text-gray-500 whitespace-nowrap">Excellent</span>
+                                </div>
+                                <input type="number" name="smoothness" x-model.number="smoothness" min="1" max="10" step="0.1"
+                                       class="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-silver-200 text-sm focus:border-silver-500 focus:ring-2 focus:ring-silver-500/20"
+                                       placeholder="1-10">
+                            </div>
+
+                            <!-- Calmness -->
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <label class="block text-silver-300 font-medium text-sm">
+                                        How calm is your skin (redness / inflammation)?
+                                    </label>
+                                    <span class="text-2xl font-bold text-green-400" x-text="calmness.toFixed(1)"></span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs text-gray-500 whitespace-nowrap">Very poor</span>
+                                    <input type="range" x-model.number="calmness" min="1" max="10" step="0.1"
+                                           class="flex-1 bg-transparent rounded-lg appearance-none cursor-pointer slider-green">
+                                    <span class="text-xs text-gray-500 whitespace-nowrap">Excellent</span>
+                                </div>
+                                <input type="number" name="calmness" x-model.number="calmness" min="1" max="10" step="0.1"
+                                       class="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-silver-200 text-sm focus:border-silver-500 focus:ring-2 focus:ring-silver-500/20"
+                                       placeholder="1-10">
+                            </div>
+
+                            <!-- Clarity -->
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <label class="block text-silver-300 font-medium text-sm">
+                                        How clear is your skin (breakouts/acne)?
+                                    </label>
+                                    <span class="text-2xl font-bold text-purple-400" x-text="clarity.toFixed(1)"></span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs text-gray-500 whitespace-nowrap">Very poor</span>
+                                    <input type="range" x-model.number="clarity" min="1" max="10" step="0.1"
+                                           class="flex-1 bg-transparent rounded-lg appearance-none cursor-pointer slider-purple">
+                                    <span class="text-xs text-gray-500 whitespace-nowrap">Excellent</span>
+                                </div>
+                                <input type="number" name="clarity" x-model.number="clarity" min="1" max="10" step="0.1"
+                                       class="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-silver-200 text-sm focus:border-silver-500 focus:ring-2 focus:ring-silver-500/20"
+                                       placeholder="1-10">
+                            </div>
+
+                            <!-- Hydration -->
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <label class="block text-silver-300 font-medium text-sm">
+                                        How hydrated does your skin feel?
+                                    </label>
+                                    <span class="text-2xl font-bold text-blue-400" x-text="hydration.toFixed(1)"></span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs text-gray-500 whitespace-nowrap">Very poor</span>
+                                    <input type="range" x-model.number="hydration" min="1" max="10" step="0.1"
+                                           class="flex-1 bg-transparent rounded-lg appearance-none cursor-pointer slider-blue">
+                                    <span class="text-xs text-gray-500 whitespace-nowrap">Excellent</span>
+                                </div>
+                                <input type="number" name="hydration" x-model.number="hydration" min="1" max="10" step="0.1"
+                                       class="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-silver-200 text-sm focus:border-silver-500 focus:ring-2 focus:ring-silver-500/20"
+                                       placeholder="1-10">
+                            </div>
+
+                            <!-- Firmness -->
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <label class="block text-silver-300 font-medium text-sm">
+                                        How firm and youthful does your skin look (fine lines)?
+                                    </label>
+                                    <span class="text-2xl font-bold text-orange-400" x-text="firmness.toFixed(1)"></span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs text-gray-500 whitespace-nowrap">Very poor</span>
+                                    <input type="range" x-model.number="firmness" min="1" max="10" step="0.1"
+                                           class="flex-1 bg-transparent rounded-lg appearance-none cursor-pointer slider-orange">
+                                    <span class="text-xs text-gray-500 whitespace-nowrap">Excellent</span>
+                                </div>
+                                <input type="number" name="firmness" x-model.number="firmness" min="1" max="10" step="0.1"
+                                       class="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-silver-200 text-sm focus:border-silver-500 focus:ring-2 focus:ring-silver-500/20"
+                                       placeholder="1-10">
+                            </div>
+
+                            <!-- Evenness -->
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <label class="block text-silver-300 font-medium text-sm">
+                                        How even is your overall skin tone?
+                                    </label>
+                                    <span class="text-2xl font-bold text-pink-400" x-text="evenness.toFixed(1)"></span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs text-gray-500 whitespace-nowrap">Very poor</span>
+                                    <input type="range" x-model.number="evenness" min="1" max="10" step="0.1"
+                                           class="flex-1 bg-transparent rounded-lg appearance-none cursor-pointer slider-pink">
+                                    <span class="text-xs text-gray-500 whitespace-nowrap">Excellent</span>
+                                </div>
+                                <input type="number" name="evenness" x-model.number="evenness" min="1" max="10" step="0.1"
+                                       class="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-silver-200 text-sm focus:border-silver-500 focus:ring-2 focus:ring-silver-500/20"
+                                       placeholder="1-10">
+                            </div>
+
+                            <!-- Skin Notes -->
+                            <div class="space-y-3">
+                                <label class="block text-silver-300 font-medium text-sm">Notes (Optional)</label>
+                                <textarea name="skin_notes" rows="3"
+                                          class="w-full px-4 py-3 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-silver-200 text-sm focus:border-silver-500 focus:ring-2 focus:ring-silver-500/20"
+                                          placeholder="Any observations about your skin today..."></textarea>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -200,7 +345,6 @@
                         <input type="hidden" name="focus" value="{{ $baseline->focus }}">
                         <input type="hidden" name="sleep" value="{{ $baseline->sleep }}">
                         <input type="hidden" name="gut_health" value="{{ $baseline->gut_health }}">
-                        <input type="hidden" name="skin_glow" value="{{ $baseline->skin_glow }}">
 
                         <div>
                             <input type="file"
@@ -222,7 +366,7 @@
                 </div>
             @endif
 
-            <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
                 <div class="text-center">
                     <div class="text-2xl font-bold text-silver-300">{{ $baseline->energy }}</div>
                     <div class="text-xs text-gray-500 mt-1">Energy</div>
@@ -238,10 +382,6 @@
                 <div class="text-center">
                     <div class="text-2xl font-bold text-silver-300">{{ $baseline->gut_health }}</div>
                     <div class="text-xs text-gray-500 mt-1">Gut</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-2xl font-bold text-silver-300">{{ $baseline->skin_glow }}</div>
-                    <div class="text-xs text-gray-500 mt-1">Skin</div>
                 </div>
                 <div class="text-center border-l border-silver-900/30">
                     <div class="text-2xl font-bold text-silver-400">{{ number_format($baseline->mito_age_score, 1) }}</div>
@@ -281,8 +421,7 @@
                       energy: {{ $todayLog->energy ?? 5 }},
                       focus: {{ $todayLog->focus ?? 5 }},
                       sleep: {{ $todayLog->sleep ?? 5 }},
-                      gut_health: {{ $todayLog->gut_health ?? 5 }},
-                      skin_glow: {{ $todayLog->skin_glow ?? 5 }}
+                      gut_health: {{ $todayLog->gut_health ?? 5 }}
                   }">
                 @csrf
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -334,19 +473,6 @@
                         <input type="range" x-model.number="gut_health" min="1" max="10" step="0.1"
                                class="w-full bg-transparent rounded-lg appearance-none cursor-pointer slider-orange">
                         <input type="number" name="gut_health" x-model.number="gut_health" min="1" max="10" step="0.1" required
-                               class="w-full px-4 py-3 bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg text-silver-200 focus:border-silver-500 focus:ring-2 focus:ring-silver-500/20"
-                               placeholder="1-10">
-                    </div>
-
-                    <!-- Skin Glow -->
-                    <div class="space-y-3">
-                        <label class="block text-silver-300 font-medium flex items-center justify-between">
-                            <span>Skin Glow</span>
-                            <span class="text-2xl font-bold text-pink-400" x-text="skin_glow.toFixed(1)"></span>
-                        </label>
-                        <input type="range" x-model.number="skin_glow" min="1" max="10" step="0.1"
-                               class="w-full bg-transparent rounded-lg appearance-none cursor-pointer slider-pink">
-                        <input type="number" name="skin_glow" x-model.number="skin_glow" min="1" max="10" step="0.1" required
                                class="w-full px-4 py-3 bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg text-silver-200 focus:border-silver-500 focus:ring-2 focus:ring-silver-500/20"
                                placeholder="1-10">
                     </div>

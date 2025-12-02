@@ -2,11 +2,28 @@
     <!-- Page Title -->
     <div class="mb-8">
         <h2 class="text-2xl font-bold text-silver-100 mb-2">Create Your Account</h2>
-        <p class="text-silver-400 text-sm">Start your 90-day transformation journey today</p>
+        <p class="text-silver-400 text-sm">Start your 360-day transformation journey today</p>
+
+        @if(isset($referralCode) && $referralCode)
+            <div class="mt-4 p-4 bg-gradient-to-r from-purple-900/30 to-blue-900/30 border border-purple-500/30 rounded-lg">
+                <div class="flex items-center gap-2 mb-1">
+                    <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+                    </svg>
+                    <p class="text-purple-200 font-semibold text-sm">Special Offer Applied!</p>
+                </div>
+                <p class="text-purple-300 text-xs">You'll get <strong>15% off your first month</strong> with this referral link.</p>
+            </div>
+        @endif
     </div>
 
     <form method="POST" action="{{ route('register') }}" class="space-y-6">
         @csrf
+
+        <!-- Hidden Referral Code -->
+        @if(isset($referralCode) && $referralCode)
+            <input type="hidden" name="referral_code" value="{{ $referralCode }}" />
+        @endif
 
         <!-- Name -->
         <div>

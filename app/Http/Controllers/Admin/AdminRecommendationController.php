@@ -35,7 +35,7 @@ class AdminRecommendationController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'kpi' => 'required|in:energy,focus,sleep,gut_health,skin_glow',
+            'kpi' => 'required|in:energy,focus,sleep,gut_health',
             'product_name' => 'required|string|max:255',
             'product_link' => 'nullable|url|max:500',
             'description' => 'nullable|string|max:1000',
@@ -63,7 +63,7 @@ class AdminRecommendationController extends Controller
     public function update(Request $request, Recommendation $recommendation)
     {
         $validated = $request->validate([
-            'kpi' => 'required|in:energy,focus,sleep,gut_health,skin_glow',
+            'kpi' => 'required|in:energy,focus,sleep,gut_health',
             'product_name' => 'required|string|max:255',
             'product_link' => 'nullable|url|max:500',
             'description' => 'nullable|string|max:1000',

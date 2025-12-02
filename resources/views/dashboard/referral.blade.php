@@ -19,8 +19,8 @@
                     </svg>
                 </div>
                 <div>
-                    <h2 class="text-3xl font-bold text-white">Earn Rewards. Share the Journey.</h2>
-                    <p class="text-purple-200">Invite friends and get rewarded together</p>
+                    <h2 class="text-3xl font-bold text-white">Give 15% Off. Earn 10% Monthly.</h2>
+                    <p class="text-purple-200">Invite friends to True Form Elite — they save on their first month, and you earn 10% monthly rewards for as long as they stay.</p>
                 </div>
             </div>
 
@@ -30,7 +30,7 @@
                         <div class="text-3xl">🎁</div>
                         <div>
                             <div class="text-white font-bold text-lg">Give 15% Off</div>
-                            <div class="text-purple-200 text-sm">Your friends save on their first month</div>
+                            <div class="text-purple-200 text-sm">Your friends get 15% off their first month when they join using your link.</div>
                         </div>
                     </div>
                 </div>
@@ -39,8 +39,19 @@
                     <div class="flex items-center gap-3 mb-2">
                         <div class="text-3xl">💰</div>
                         <div>
-                            <div class="text-white font-bold text-lg">Get 10% Monthly</div>
-                            <div class="text-purple-200 text-sm">Earn rewards for each successful referral</div>
+                            <div class="flex items-center gap-2">
+                                <div class="text-white font-bold text-lg">Earn 10% Monthly</div>
+                                <div class="relative group">
+                                    <svg class="w-4 h-4 text-purple-300 cursor-help" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-[#0f0f0f] border border-purple-500/50 rounded-lg text-xs text-silver-200 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                                        You earn 10% of your friend's monthly subscription fee deposited to your account each month they remain subscribed.
+                                        <div class="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-[#0f0f0f]"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-purple-200 text-sm">You earn 10% of their monthly subscription while they remain active.</div>
                         </div>
                     </div>
                 </div>
@@ -50,7 +61,8 @@
 
     <!-- Your Referral Link -->
     <div class="bg-[#141414] rounded-2xl p-6 border border-[#2a2a2a]">
-        <h3 class="text-2xl font-bold text-silver-200 mb-4">Your Unique Referral Link</h3>
+        <h3 class="text-2xl font-bold text-silver-200 mb-2">Your Unique Referral Link</h3>
+        <p class="text-silver-400 text-sm mb-4">Share this link with friends. They'll get 15% off their first month, and you'll earn 10% monthly while they stay subscribed.</p>
 
         <div class="flex flex-col md:flex-row gap-3">
             <div class="flex-1">
@@ -82,7 +94,7 @@
     </div>
 
     <!-- Stats & Progress -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="bg-[#141414] rounded-xl p-6 border border-[#2a2a2a] text-center">
             <div class="text-4xl font-bold text-purple-400 mb-1">{{ $stats['total'] }}</div>
             <div class="text-sm text-silver-500">Total Invites</div>
@@ -94,22 +106,35 @@
         </div>
 
         <div class="bg-[#141414] rounded-xl p-6 border border-[#2a2a2a] text-center">
-            <div class="text-4xl font-bold text-yellow-400 mb-1">{{ $stats['pending'] }}</div>
-            <div class="text-sm text-silver-500">Pending</div>
-        </div>
-
-        <div class="bg-[#141414] rounded-xl p-6 border border-[#2a2a2a] text-center">
-            <div class="text-4xl font-bold text-blue-400 mb-1">{{ $stats['rewarded'] }}</div>
+            <div class="text-4xl font-bold text-blue-400 mb-1">${{ number_format($stats['total_earned'] ?? 0, 2) }} AUD</div>
             <div class="text-sm text-silver-500">Rewards Earned</div>
         </div>
     </div>
 
-    <!-- Progress to Next Reward -->
+    <!-- Progress to Free Month -->
+    @php
+        $completedReferrals = $stats['completed'] + $stats['rewarded'];
+        $nextFreeMonthAt = 3;
+        $referralsToNextFreeMonth = max(0, $nextFreeMonthAt - ($completedReferrals % $nextFreeMonthAt));
+        if ($referralsToNextFreeMonth === 0 && $completedReferrals > 0) {
+            $referralsToNextFreeMonth = $nextFreeMonthAt;
+        }
+        $progressPercent = ($completedReferrals % $nextFreeMonthAt) / $nextFreeMonthAt * 100;
+        if ($completedReferrals > 0 && $completedReferrals % $nextFreeMonthAt === 0) {
+            $progressPercent = 100;
+        }
+        $freeMonthsEarned = floor($completedReferrals / $nextFreeMonthAt);
+    @endphp
     <div class="bg-gradient-to-br from-[#16213e] to-[#1a1a2e] rounded-2xl p-6 border border-purple-500/30">
         <div class="flex items-center justify-between mb-4">
-            <h3 class="text-xl font-bold text-silver-200">Progress to Next Reward</h3>
+            <div>
+                <h3 class="text-xl font-bold text-silver-200">Progress to Free Month</h3>
+                @if($freeMonthsEarned > 0)
+                    <p class="text-xs text-purple-300 mt-1">You've earned {{ $freeMonthsEarned }} free {{ $freeMonthsEarned == 1 ? 'month' : 'months' }} so far!</p>
+                @endif
+            </div>
             <span class="px-3 py-1 bg-purple-600/20 text-purple-400 rounded-full text-sm font-semibold">
-                {{ $completedReferrals }}/{{ $nextRewardAt }}
+                {{ $completedReferrals % $nextFreeMonthAt }}/{{ $nextFreeMonthAt }}
             </span>
         </div>
 
@@ -119,10 +144,14 @@
         </div>
 
         <p class="text-sm text-silver-400">
-            @if($completedReferrals >= $nextRewardAt)
-                🎉 Congratulations! You've earned a free month!
+            @if($completedReferrals === 0)
+                🚀 Get 3 successful referrals to earn your first free month!
+            @elseif($completedReferrals % $nextFreeMonthAt === 0 && $completedReferrals > 0)
+                🎉 Congratulations! You've earned a free month! Keep going to earn more.
+            @elseif($referralsToNextFreeMonth === 1)
+                Just 1 more referral to earn your next free month!
             @else
-                Invite {{ $nextRewardAt - $completedReferrals }} more {{ $nextRewardAt - $completedReferrals == 1 ? 'friend' : 'friends' }} to earn a free month
+                Invite {{ $referralsToNextFreeMonth }} more friends to earn your next free month
             @endif
         </p>
     </div>
@@ -131,29 +160,53 @@
     <div class="bg-[#141414] rounded-2xl p-6 border border-[#2a2a2a]">
         <h3 class="text-2xl font-bold text-silver-200 mb-4">Send Invitation</h3>
 
-        <form action="{{ route('dashboard.referral.send') }}" method="POST" class="flex flex-col md:flex-row gap-3">
+        <form action="{{ route('dashboard.referral.send') }}" method="POST" class="space-y-4">
             @csrf
-            <div class="flex-1">
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="friend@example.com"
-                    required
-                    class="w-full px-4 py-3 bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg text-silver-300 placeholder-silver-600 focus:outline-none focus:border-purple-500"
-                />
+            <div class="flex flex-col md:flex-row gap-3">
+                <div class="flex-1">
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="friend@example.com"
+                        required
+                        class="w-full px-4 py-3 bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg text-silver-300 placeholder-silver-600 focus:outline-none focus:border-purple-500"
+                    />
+                </div>
+                <button
+                    type="submit"
+                    class="px-6 py-3 bg-silver-600 hover:bg-silver-500 text-white font-semibold rounded-lg transition-all flex items-center gap-2 justify-center"
+                >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    Send Invite
+                </button>
             </div>
-            <button
-                type="submit"
-                class="px-6 py-3 bg-silver-600 hover:bg-silver-500 text-white font-semibold rounded-lg transition-all flex items-center gap-2 justify-center"
-            >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                Send Invite
-            </button>
+
+            <!-- Email Preview -->
+            <div class="bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg p-4">
+                <p class="text-xs text-silver-500 mb-2">Email Preview:</p>
+                <div class="space-y-2 text-sm">
+                    <div class="text-silver-400">
+                        <span class="text-silver-600">Subject:</span> <span class="text-silver-300">Transform Your Health with True Form Elite – Get 15% Off!</span>
+                    </div>
+                    <div class="text-silver-400 text-xs leading-relaxed">
+                        <span class="text-silver-600">Body:</span><br/>
+                        <div class="mt-2 pl-3 border-l-2 border-purple-500/30 text-silver-400">
+                            Hey!<br/><br/>
+                            I've been using True Form Elite to track my wellness journey, and it's been incredible. I thought you might be interested!<br/><br/>
+                            Use my referral link to get <strong class="text-silver-300">15% off your first month</strong>:<br/>
+                            <span class="text-purple-400 font-mono">{{ $referralLink }}</span><br/><br/>
+                            It's a 360-day transformation program that helps you track energy, focus, sleep, gut health, and skin glow. If you're serious about improving your health, I think you'll love it.<br/><br/>
+                            Let me know if you have any questions!<br/><br/>
+                            {{ auth()->user()->name }}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </form>
 
-        <p class="mt-3 text-xs text-silver-500">We'll send them an email invitation with your referral link</p>
+        <p class="mt-3 text-xs text-silver-500">We'll send this email invitation with your referral link to your friend</p>
     </div>
 
     <!-- Referral History -->
@@ -225,7 +278,7 @@
                     <span class="text-2xl">3️⃣</span>
                 </div>
                 <h4 class="font-bold text-silver-200 mb-2">You Both Win</h4>
-                <p class="text-sm text-silver-500">Earn rewards when they complete their first 30 days</p>
+                <p class="text-sm text-silver-500">They get 15% off, and you earn 10% monthly while they stay subscribed. Every 3 referrals = 1 free month!</p>
             </div>
         </div>
     </div>

@@ -7,6 +7,7 @@ use App\Http\Controllers\Dashboard\ProgressController;
 use App\Http\Controllers\Dashboard\CommunityController;
 use App\Http\Controllers\Dashboard\TransformationProfileController;
 use App\Http\Controllers\Dashboard\ReferralController;
+use App\Http\Controllers\Dashboard\SkinAssessmentController;
 use App\Http\Controllers\GuaranteeFaqController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminUserController;
@@ -15,9 +16,11 @@ use App\Http\Controllers\Admin\AdminAnalyticsController;
 use App\Http\Controllers\Admin\AdminLogController;
 use App\Http\Controllers\Admin\AdminMilestoneController;
 use App\Http\Controllers\Admin\AdminGlowScanController;
+use App\Http\Controllers\Admin\SkinAssessmentsController as AdminSkinAssessmentsController;
 use App\Http\Controllers\Admin\AdminExportController;
 use App\Http\Controllers\Admin\AdminSettingsController;
 use App\Http\Controllers\Admin\AdminRecommendationController;
+use App\Http\Controllers\Admin\AdminReferralController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -46,6 +49,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/referral', [ReferralController::class, 'index'])->name('referral');
         Route::post('/referral/send', [ReferralController::class, 'sendInvite'])->name('referral.send');
         Route::get('/guarantee-faq', [GuaranteeFaqController::class, 'index'])->name('guarantee-faq');
+
+        // Skin Glow Assessment
+        Route::get('/skin-assessment', [SkinAssessmentController::class, 'index'])->name('skin-assessment.index');
+        Route::get('/skin-assessment/create/{milestoneDay}', [SkinAssessmentController::class, 'create'])->name('skin-assessment.create');
+        Route::post('/skin-assessment', [SkinAssessmentController::class, 'store'])->name('skin-assessment.store');
+        Route::get('/skin-assessment/{assessment}', [SkinAssessmentController::class, 'show'])->name('skin-assessment.show');
     });
 });
 
@@ -90,11 +99,20 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/glow-scans', [AdminGlowScanController::class, 'index'])->name('glow-scans.index');
     Route::get('/glow-scans/{scan}', [AdminGlowScanController::class, 'show'])->name('glow-scans.show');
 
+    // Skin Assessments
+    Route::get('/skin-assessments', [AdminSkinAssessmentsController::class, 'index'])->name('skin-assessments.index');
+    Route::get('/skin-assessments/{assessment}', [AdminSkinAssessmentsController::class, 'show'])->name('skin-assessments.show');
+
     // Exports
     Route::get('/exports', [AdminExportController::class, 'index'])->name('exports.index');
     Route::post('/exports/users', [AdminExportController::class, 'users'])->name('exports.users');
     Route::post('/exports/logs', [AdminExportController::class, 'logs'])->name('exports.logs');
     Route::post('/exports/baselines', [AdminExportController::class, 'baselines'])->name('exports.baselines');
+    Route::post('/exports/improvements', [AdminExportController::class, 'improvements'])->name('exports.improvements');
+    Route::post('/exports/skin-assessments', [AdminExportController::class, 'skinAssessments'])->name('exports.skin-assessments');
+    Route::post('/exports/milestones', [AdminExportController::class, 'milestones'])->name('exports.milestones');
+    Route::post('/exports/programs', [AdminExportController::class, 'programs'])->name('exports.programs');
+    Route::post('/exports/date-range', [AdminExportController::class, 'dateRange'])->name('exports.date-range');
     Route::post('/exports/complete', [AdminExportController::class, 'complete'])->name('exports.complete');
 
     // Settings
@@ -109,6 +127,22 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::put('/recommendations/{recommendation}', [AdminRecommendationController::class, 'update'])->name('recommendations.update');
     Route::delete('/recommendations/{recommendation}', [AdminRecommendationController::class, 'destroy'])->name('recommendations.destroy');
     Route::patch('/recommendations/{recommendation}/toggle-active', [AdminRecommendationController::class, 'toggleActive'])->name('recommendations.toggle-active');
+
+    // Referrals
+    Route::get('/referrals', [AdminReferralController::class, 'index'])->name('referrals.index');
+
+    // Monthly Rewards (before {referral} route to avoid conflicts)
+    Route::get('/referrals/monthly-rewards', [AdminReferralController::class, 'monthlyRewards'])->name('referrals.monthly-rewards');
+    Route::patch('/referrals/rewards/{reward}/mark-paid', [AdminReferralController::class, 'markRewardPaid'])->name('referrals.rewards.mark-paid');
+    Route::post('/referrals/generate-monthly-rewards', [AdminReferralController::class, 'generateMonthlyRewards'])->name('referrals.generate-monthly-rewards');
+
+    // Free Months
+    Route::get('/referrals/free-months', [AdminReferralController::class, 'freeMonths'])->name('referrals.free-months');
+    Route::patch('/referrals/free-months/{freeMonth}/approve', [AdminReferralController::class, 'approveFreeMonth'])->name('referrals.free-months.approve');
+
+    // Individual Referral
+    Route::get('/referrals/{referral}', [AdminReferralController::class, 'show'])->name('referrals.show');
+    Route::patch('/referrals/{referral}/subscription', [AdminReferralController::class, 'updateSubscriptionStatus'])->name('referrals.update-subscription');
 });
 
 require __DIR__.'/auth.php';

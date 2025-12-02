@@ -72,7 +72,7 @@ class AdminLogController extends Controller
         $logs = $query->orderBy('log_date', 'desc')->get();
 
         $csvData = [];
-        $csvData[] = ['User ID', 'User Name', 'Email', 'Log Date', 'Energy', 'Focus', 'Sleep', 'Gut Health', 'Skin Glow', 'Mito-Age Score', 'Notes'];
+        $csvData[] = ['User ID', 'User Name', 'Email', 'Log Date', 'Energy', 'Focus', 'Sleep', 'Gut Health', 'Mito-Age Score', 'Notes'];
 
         foreach ($logs as $log) {
             $csvData[] = [
@@ -84,7 +84,6 @@ class AdminLogController extends Controller
                 $log->focus,
                 $log->sleep,
                 $log->gut_health,
-                $log->skin_glow,
                 $log->mito_age_score,
                 $log->notes ?? '',
             ];

@@ -48,7 +48,6 @@ class AdminAnalyticsController extends Controller
                 DB::raw('AVG(daily_logs.focus - baselines.focus) as focus_improvement'),
                 DB::raw('AVG(daily_logs.sleep - baselines.sleep) as sleep_improvement'),
                 DB::raw('AVG(daily_logs.gut_health - baselines.gut_health) as gut_health_improvement'),
-                DB::raw('AVG(daily_logs.skin_glow - baselines.skin_glow) as skin_glow_improvement'),
                 DB::raw('AVG(daily_logs.mito_age_score - baselines.mito_age_score) as overall_improvement'),
             ])
             ->first();

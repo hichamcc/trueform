@@ -33,58 +33,51 @@
                 </div>
             </div>
 
-            <!-- Progress Bar with Stage Markers -->
-            <div class="mb-2">
-                <div class="w-full bg-gray-800 rounded-full h-2.5 overflow-hidden">
+            <!-- Elite Progress Bar (360-Day Journey) -->
+            <div class="mt-3">
+                <div class="flex items-center justify-between mb-2">
+                    <div>
+                        <p class="text-sm text-silver-400">Elite Progress</p>
+                        <p class="text-xs text-gray-500">Your 360-Day Transformation Journey</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-2xl font-bold {{ $stageTheme['text'] ?? 'text-silver-300' }}">
+                            {{ number_format(($currentDay / 360) * 100, 0) }}%
+                        </p>
+                        <p class="text-xs text-gray-500">Complete</p>
+                    </div>
+                </div>
+
+                <div class="w-full bg-gray-800 rounded-full h-3 overflow-hidden">
                     <div class="bg-gradient-to-r {{ $stageTheme['gradient'] ?? 'from-silver-500 to-silver-300' }} h-full rounded-full transition-all duration-500"
                          style="width: {{ ($currentDay / 360) * 100 }}%"></div>
                 </div>
-            </div>
 
-            <!-- Stage Milestones -->
-            <div class="flex justify-between text-xs text-gray-500">
-                <div class="flex flex-col items-center {{ $currentDay >= 1 ? 'text-green-400' : '' }}">
-                    <span class="font-semibold">Start</span>
-                </div>
-                <div class="flex flex-col items-center {{ $currentDay >= 90 ? 'text-green-400' : '' }}">
-                    <span class="font-semibold">Day 90</span>
-                    @if($currentDay >= 90)
-                        <span class="text-xs">✓</span>
-                    @endif
-                </div>
-                <div class="flex flex-col items-center {{ $currentDay >= 180 ? 'text-blue-400' : '' }}">
-                    <span class="font-semibold">Day 180</span>
-                    @if($currentDay >= 180)
-                        <span class="text-xs">✓</span>
-                    @endif
-                </div>
-                <div class="flex flex-col items-center {{ $currentDay >= 360 ? 'text-yellow-400' : '' }}">
-                    <span class="font-semibold">Day 360</span>
-                    @if($currentDay >= 360)
-                        <span class="text-xs">✓</span>
-                    @endif
-                </div>
-            </div>
-
-            <!-- Current Stage Progress -->
-            @if($currentStage <= 3)
-                <div class="mt-3 p-2 bg-{{ $currentStage == 1 ? 'green' : ($currentStage == 2 ? 'blue' : 'yellow') }}-900/20 rounded-lg border border-{{ $currentStage == 1 ? 'green' : ($currentStage == 2 ? 'blue' : 'yellow') }}-500/30">
-                    <div class="flex items-center justify-between text-xs">
-                        <span class="text-{{ $currentStage == 1 ? 'green' : ($currentStage == 2 ? 'blue' : 'yellow') }}-300 font-medium">
-                            {{ $stageName }} Stage Progress:
-                        </span>
-                        <span class="text-{{ $currentStage == 1 ? 'green' : ($currentStage == 2 ? 'blue' : 'yellow') }}-400 font-bold">
-                            @if($currentStage == 1)
-                                {{ $currentDay }}/90 Days
-                            @elseif($currentStage == 2)
-                                {{ $currentDay - 90 }}/90 Days
-                            @else
-                                {{ $currentDay - 180 }}/180 Days
-                            @endif
-                        </span>
+                <!-- Stage Milestones -->
+                <div class="flex justify-between text-xs text-gray-500 mt-2">
+                    <div class="flex flex-col items-center {{ $currentDay >= 1 ? 'text-green-400' : '' }}">
+                        <span class="font-semibold">Start</span>
+                    </div>
+                    <div class="flex flex-col items-center {{ $currentDay >= 90 ? 'text-green-400' : '' }}">
+                        <span class="font-semibold">Day 90</span>
+                        @if($currentDay >= 90)
+                            <span class="text-xs">✓</span>
+                        @endif
+                    </div>
+                    <div class="flex flex-col items-center {{ $currentDay >= 180 ? 'text-blue-400' : '' }}">
+                        <span class="font-semibold">Day 180</span>
+                        @if($currentDay >= 180)
+                            <span class="text-xs">✓</span>
+                        @endif
+                    </div>
+                    <div class="flex flex-col items-center {{ $currentDay >= 360 ? 'text-yellow-400' : '' }}">
+                        <span class="font-semibold">Day 360</span>
+                        @if($currentDay >= 360)
+                            <span class="text-xs">✓</span>
+                        @endif
                     </div>
                 </div>
-            @endif
+            </div>
         </div>
     </div>
 
@@ -408,26 +401,72 @@
                         @endif
                     </div>
 
-                    <!-- Skin Glow Card -->
-                    @php $glowColor = $getColorClass($latestLog->skin_glow); @endphp
-                    <div class="group bg-gradient-to-br from-[#141414] to-[#0f0f0f] rounded-lg p-4 border {{ $glowColor['border'] }} {{ $glowColor['bg'] }} hover:ring-2 {{ $glowColor['ring'] }} transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-xl {{ $glowColor['glow'] }}">
+                    <!-- Skin Score Card (Read-Only from Assessments) -->
+                    @php
+                        $skinColor = $currentSkinScore ? $getColorClass($currentSkinScore) : [
+                            'bg' => 'bg-gray-900/30',
+                            'border' => 'border-gray-500/50',
+                            'text' => 'text-gray-400',
+                            'ring' => 'ring-gray-500/50',
+                            'gradient' => 'from-gray-600 to-gray-500',
+                            'glow' => 'shadow-gray-500/20'
+                        ];
+                    @endphp
+                    <div class="group bg-gradient-to-br from-[#141414] to-[#0f0f0f] rounded-lg p-4 border {{ $skinColor['border'] }} {{ $skinColor['bg'] }} transition-all duration-300 shadow-lg relative">
+                        <!-- Read-Only Badge -->
+                        <div class="absolute top-2 right-2">
+                            <span class="px-2 py-1 bg-blue-600/20 border border-blue-600/30 rounded text-xs text-blue-400 font-semibold">
+                                📊 Assessment
+                            </span>
+                        </div>
+
                         <div class="flex items-center justify-between mb-3">
-                            <div class="w-10 h-10 rounded-lg bg-gradient-to-br {{ $glowColor['gradient'] }} flex items-center justify-center shadow-md">
+                            <div class="w-10 h-10 rounded-lg bg-gradient-to-br {{ $skinColor['gradient'] }} flex items-center justify-center shadow-md">
                                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
                                 </svg>
                             </div>
                         </div>
-                        <div class="text-3xl font-bold {{ $glowColor['text'] }} mb-2">{{ number_format($latestLog->skin_glow, 1) }}</div>
-                        <div class="text-sm font-semibold text-silver-200 mb-2">Skin Glow</div>
-                        @if($hasBaseline)
-                            @php
-                                $change = $latestLog->skin_glow - $baseline->skin_glow;
-                                $changePercent = $baseline->skin_glow > 0 ? (($change / $baseline->skin_glow) * 100) : 0;
-                            @endphp
-                            <div class="flex items-center gap-1 text-xs font-semibold {{ $change >= 0 ? 'text-green-400' : 'text-red-400' }}">
-                                <span>{{ $change >= 0 ? '↗' : '↘' }}</span>
-                                <span>{{ $change >= 0 ? '+' : '' }}{{ number_format($changePercent, 0) }}%</span>
+
+                        @if($currentSkinScore)
+                            <div class="text-3xl font-bold {{ $skinColor['text'] }} mb-2">{{ number_format($currentSkinScore, 1) }}</div>
+                            <div class="text-sm font-semibold text-silver-200 mb-2">Skin Score</div>
+
+                            @if($skinScoreChange !== null)
+                                @php
+                                    $changePercent = $baselineSkinScore > 0 ? (($skinScoreChange / $baselineSkinScore) * 100) : 0;
+                                @endphp
+                                <div class="flex items-center gap-1 text-xs font-semibold {{ $skinScoreChange >= 0 ? 'text-green-400' : 'text-red-400' }}">
+                                    <span>{{ $skinScoreChange >= 0 ? '↗' : '↘' }}</span>
+                                    <span>{{ $skinScoreChange >= 0 ? '+' : '' }}{{ number_format($changePercent, 0) }}%</span>
+                                </div>
+                            @else
+                                <div class="text-xs text-gray-500">
+                                    @if($latestSkinAssessment)
+                                        Last: {{ $latestSkinAssessment->assessment_date->format('M j') }}
+                                    @endif
+                                </div>
+                            @endif
+
+                            <!-- Link to Assessment -->
+                            <div class="mt-3 pt-3 border-t border-[#2a2a3e]">
+                                <p class="text-xs text-gray-400 mb-2">Tracked via Skin Glow Assessment every 30 days</p>
+                                <a href="{{ route('dashboard.skin-assessment.index') }}"
+                                   class="block text-center px-3 py-1.5 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-600/30 text-blue-400 text-xs font-semibold rounded transition">
+                                    Open Assessment
+                                </a>
+                            </div>
+                        @else
+                            <div class="text-xl font-bold text-gray-400 mb-2">--</div>
+                            <div class="text-sm font-semibold text-silver-200 mb-2">Skin Score</div>
+                            <div class="text-xs text-gray-500 mb-3">Complete your baseline assessment</div>
+
+                            <!-- Link to Assessment -->
+                            <div class="mt-2">
+                                <a href="{{ route('dashboard.skin-assessment.index') }}"
+                                   class="block text-center px-3 py-1.5 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-600/30 text-blue-400 text-xs font-semibold rounded transition">
+                                    Take Assessment
+                                </a>
                             </div>
                         @endif
                     </div>

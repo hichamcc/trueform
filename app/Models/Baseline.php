@@ -13,7 +13,6 @@ class Baseline extends Model
         'focus',
         'sleep',
         'gut_health',
-        'skin_glow',
         'image',
         'photo',
     ];
@@ -23,7 +22,6 @@ class Baseline extends Model
         'focus' => 'decimal:1',
         'sleep' => 'decimal:1',
         'gut_health' => 'decimal:1',
-        'skin_glow' => 'decimal:1',
         'mito_age_score' => 'decimal:1',
     ];
 
